@@ -30,7 +30,7 @@ public class Main {
         System.out.println();
 
         // 4. Тестирование сеттеров
-        System.out.println(" ОБНОВЛЕНИЕ ИНФОРМАЦИИ (SETTERS):");
+        System.out.println(" обновление информации (SETTERS):");
         System.out.println("Редактируем карточку товара p2");
         p2.setProductId(102);
         p2.setName("Свежий хлеб");
