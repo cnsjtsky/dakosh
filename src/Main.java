@@ -12,14 +12,14 @@ public class Main {
         Sale s1 = new Sale(5001, "Дакош", 6000.0, "2024-05-20");
 
         // 2. Начальное состояние
-        System.out.println("ТЕКУЩЕЕ СОСТОЯНИЕ БАЗЫ ДАННЫХ:");
+        System.out.println("ТЕКУЩЕЕ СОСТОЯНИЕ БАЗЫ ДАННЫХ: ");
         System.out.println("Товары:");
         System.out.println("  " + p1);
         System.out.println("  " + p2);
         System.out.println("Клиенты:");
         System.out.println("  " + c1);
         System.out.println("  " + c2);
-        System.out.println("Продажи:");
+        System.out.println("Продажи: ");
         System.out.println("  " + s1);
         System.out.println();
 
