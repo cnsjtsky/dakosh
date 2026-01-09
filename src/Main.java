@@ -7,7 +7,7 @@ public class Main {
         System.out.println(" GROCERY STORE MANAGEMENT SYSTEM \n");
 
         inventory.add(new Product("Bag", 50.0, 100, "General"));
-        inventory.add(new FreshProduct("Apple", 120.0, 50, "Fruits", "2026-01-20"));
+        inventory.add(new FreshProduct("Orange", 120.0, 50, "Fruits", "2026-01-20"));
         inventory.add(new PackagedProduct("Milk", 450.0, 15, "Dairy", "789456123"));
 
         System.out.println(" POLYMORPHISM IN ACTION ");
