@@ -1,3 +1,5 @@
+package model;
+
 public class PackagedProduct extends Product {
     private String barcode;
 
@@ -8,6 +10,6 @@ public class PackagedProduct extends Product {
 
     @Override
     public void performAction() {
-        System.out.println("Scanning barcode [" + barcode + "] for packaged item: " + name);
+        System.out.println("Scanning barcode [" + barcode + "] for: " + name);
     }
 }
