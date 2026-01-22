@@ -16,7 +16,7 @@ public abstract class Product {
     public abstract void performAction();
 
     public void setPrice(double price) {
-        if (price < 0) throw new IllegalArgumentException("Negative price!");
+        if (price < 0) throw new IllegalArgumentException("Neg price!");
         this.price = price;
     }
 
