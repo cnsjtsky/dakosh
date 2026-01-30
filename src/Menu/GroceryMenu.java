@@ -1,8 +1,10 @@
-package menu;
+package Menu;
 
-import model.*;
+import Model.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import static java.lang.System.out;
 
 public class GroceryMenu implements Menu {
     private ArrayList<Product> inventory = new ArrayList<>();
@@ -10,51 +12,53 @@ public class GroceryMenu implements Menu {
 
     @Override
     public void displayMenu() {
-        System.out.println("\n--- GROCERY STORE MANAGEMENT ---");
+        System.out.println("\n GROCERY STORE MANAGEMENT");
         System.out.println("1. Add Fresh Product (Fruits/Veg)");
-        System.out.println("2. Add Packaged Product (Canned/Boxed)");
+        System. out.println("2. Add Packaged Product (Canned/Boxed)");
         System.out.println("3. View All Inventory");
         System.out.println("0. Exit");
     }
 
     @Override
-    public void run() {
+    public void run(){
         int choice = -1;
-        while (choice != 0) {
+        while (choice != 0){
             displayMenu();
-            try {
-                System.out.print("Enter choice: ");
-                choice = Integer.parseInt(scanner.nextLine());
 
-                switch (choice) {
-                    case 1: addFreshProduct(); break;
-                    case 2: addPackagedProduct(); break;
-                    case 3: viewAll(); break;
-                    case 0: System.out.println("Exiting..."); break;
-                    default: System.out.println("Invalid choice!");
-                }
-            } catch (Exception e) {
-                // This catches NumberFormatException and our Custom Exceptions
-                System.out.println("Error: " + e.getMessage());
+        }try {
+            System.out.print("entr choice");
+            choice = Integer.parseInt(scanner.nextLine());
+
+            switch (choice){
+                case 1 : addFreshProduct();break;
+                case 2: addPackagedProduct();break;
+                case 3: viewAll();break;
+                case 0:
+                    System.out.print("exit");
+                default:
+                    System.out.print("invalid choice");
+
             }
+        }catch (Exception e ) {
+            System.out.print("error" + e.getMessage());
+
         }
     }
-
-    private void addFreshProduct() {
-        System.out.print("Enter Product Name: ");
+    private void addFreshProduct(){
+        System.out.print("enter prod name");
         String name = scanner.nextLine();
-        System.out.print("Enter Price: ");
+        System.out.print("product price");
         double price = Double.parseDouble(scanner.nextLine());
-        System.out.print("Enter Quantity: ");
+        System.out.print("enter quantity");
         int qty = Integer.parseInt(scanner.nextLine());
-        System.out.print("Enter Category: ");
+        System.out.print("enter categiry");
         String cat = scanner.nextLine();
-        System.out.print("Enter Expiry Date (YYYY-MM-DD): ");
+        System.out.print("enter expirt date YYYY-MM-DD");
         String expiry = scanner.nextLine();
 
-        // Adding the user's specific input to the list
-        inventory.add(new FreshProduct(name, price, qty, cat, expiry));
-        System.out.println(name + " added successfully!");
+        inventory.add(new FreshProduct(name,price,qty,cat, expiry));
+        System.out.print(name + "added");
+
     }
 
     private void addPackagedProduct() {

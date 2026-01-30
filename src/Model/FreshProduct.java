@@ -1,4 +1,4 @@
-package model;
+package Model;
 
 public class FreshProduct extends Product {
     private String expiry;

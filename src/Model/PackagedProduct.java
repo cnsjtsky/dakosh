@@ -1,4 +1,4 @@
-package model;
+package Model;
 
 public class PackagedProduct extends Product {
     private String barcode;
