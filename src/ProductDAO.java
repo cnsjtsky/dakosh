@@ -2,17 +2,20 @@ import java.sql.*;
 
 public class ProductDAO {
 
-    public void create(String name, double price, int qty) {
-        String sql = "INSERT INTO products (name, price, quantity) VALUES (?, ?, ?)";
+    public void create(String name, double price, int qty, String cat, String expiry, String barcode) {
+        String sql = "INSERT INTO products (name, price, quantity, category, expiry_date, barcode) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, name);
             pstmt.setDouble(2, price);
             pstmt.setInt(3, qty);
+            pstmt.setString(4, cat);
+            pstmt.setString(5, expiry);
+            pstmt.setString(6, barcode);
             pstmt.executeUpdate();
-            System.out.println("Product saved to database.");
+            System.out.println(">> Database: Product added successfully.");
         } catch (SQLException e) {
-            System.out.println("Create Error: " + e.getMessage());
+            System.out.println(">> Database Error (Create): " + e.getMessage());
         }
     }
 
@@ -21,12 +24,18 @@ public class ProductDAO {
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
+            System.out.println("\n--- INVENTORY REPORT ---");
             while (rs.next()) {
-                System.out.println("ID: " + rs.getInt("product_id") + " | " + rs.getString("name") +
-                        " | Price: $" + rs.getDouble("price") + " | Qty: " + rs.getInt("quantity"));
+                System.out.println("ID: " + rs.getInt("product_id") +
+                        " | Name: " + rs.getString("name") +
+                        " | Cat: " + rs.getString("category") +
+                        " | Exp: " + rs.getString("expiry_date") +
+                        " | Barcode: " + rs.getString("barcode") +
+                        " | Price: $" + rs.getDouble("price") +
+                        " | Qty: " + rs.getInt("quantity"));
             }
         } catch (SQLException e) {
-            System.out.println("Read Error: " + e.getMessage());
+            System.out.println(">> Database Error (Read): " + e.getMessage());
         }
     }
 
@@ -37,11 +46,10 @@ public class ProductDAO {
             pstmt.setDouble(1, newPrice);
             pstmt.setInt(2, newQty);
             pstmt.setInt(3, id);
-            int rows = pstmt.executeUpdate();
-            if (rows > 0) System.out.println("Update successful.");
-            else System.out.println("ID not found.");
+            if (pstmt.executeUpdate() > 0) System.out.println(">> Database: Update complete.");
+            else System.out.println(">> Database: ID not found.");
         } catch (SQLException e) {
-            System.out.println("Update Error: " + e.getMessage());
+            System.out.println(">> Database Error (Update): " + e.getMessage());
         }
     }
 
@@ -50,11 +58,10 @@ public class ProductDAO {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
-            int rows = pstmt.executeUpdate();
-            if (rows > 0) System.out.println("Product deleted.");
-            else System.out.println("ID not found.");
+            if (pstmt.executeUpdate() > 0) System.out.println(">> Database: Product removed.");
+            else System.out.println(">> Database: ID not found.");
         } catch (SQLException e) {
-            System.out.println("Delete Error: " + e.getMessage());
+            System.out.println(">> Database Error (Delete): " + e.getMessage());
         }
     }
 
@@ -65,10 +72,10 @@ public class ProductDAO {
             pstmt.setString(1, "%" + name + "%");
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                System.out.println("Match found: " + rs.getString("name"));
+                System.out.println(">> Result: " + rs.getString("name") + " [" + rs.getString("barcode") + "]");
             }
         } catch (SQLException e) {
-            System.out.println("Search Error: " + e.getMessage());
+            System.out.println(">> Database Error (Search): " + e.getMessage());
         }
     }
 }
