@@ -2,6 +2,7 @@ import java.sql.*;
 
 public class ProductDAO {
 
+
     public void create(String name, double price, int qty, String cat, String expiry, String barcode) {
         String sql = "INSERT INTO products (name, price, quantity, category, expiry_date, barcode) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -18,6 +19,7 @@ public class ProductDAO {
             System.out.println(">> Database Error (Create): " + e.getMessage());
         }
     }
+
 
     public void readAll() {
         String sql = "SELECT * FROM products";
@@ -39,6 +41,7 @@ public class ProductDAO {
         }
     }
 
+
     public void update(int id, double newPrice, int newQty) {
         String sql = "UPDATE products SET price = ?, quantity = ? WHERE product_id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -53,6 +56,7 @@ public class ProductDAO {
         }
     }
 
+
     public void delete(int id) {
         String sql = "DELETE FROM products WHERE product_id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -65,6 +69,7 @@ public class ProductDAO {
         }
     }
 
+
     public void searchByName(String name) {
         String sql = "SELECT * FROM products WHERE name ILIKE ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -76,6 +81,30 @@ public class ProductDAO {
             }
         } catch (SQLException e) {
             System.out.println(">> Database Error (Search): " + e.getMessage());
+        }
+    }
+
+
+    public void searchByMinPrice(double minPrice) {
+        String sql = "SELECT * FROM products WHERE price >= ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setDouble(1, minPrice);
+            ResultSet rs = pstmt.executeQuery();
+
+            System.out.println("\n priced above " + minPrice );
+            boolean found = false;
+            while (rs.next()) {
+                found = true;
+                System.out.println("ID: " + rs.getInt("product_id") +
+                        " | Name: " + rs.getString("name") +
+                        " | Price: $" + rs.getDouble("price"));
+            }
+            if (!found) System.out.println("No products found above this price.");
+
+        } catch (SQLException e) {
+            System.out.println(">> Database Error (Min Search): " + e.getMessage());
         }
     }
 }
