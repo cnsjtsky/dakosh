@@ -66,6 +66,7 @@ public class ProductDAO {
             else System.out.println(">> Database: ID not found.");
         } catch (SQLException e) {
             System.out.println(">> Database Error (Delete): " + e.getMessage());
+
         }
     }
 

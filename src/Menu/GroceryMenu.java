@@ -6,7 +6,7 @@ public class GroceryMenu {
 
     public void run() {
         while (true) {
-            System.out.println("\n=== GROCERY STORE SYSTEM (Week 8) ===");
+            System.out.println("\n GROCERY STORE SYSTEM  ");
             System.out.println("1. Create (Add Product)");
             System.out.println("2. Read   (Show All)");
             System.out.println("3. Update (Price/Qty)");
@@ -22,29 +22,57 @@ public class GroceryMenu {
             try {
                 switch (choice) {
                     case "1":
-
+                        System.out.print("Name: ");
+                        String n = scanner.nextLine();
+                        System.out.print("Category: ");
+                        String c = scanner.nextLine();
+                        System.out.print("Expiry (YYYY-MM-DD): ");
+                        String ex = scanner.nextLine();
+                        System.out.print("Barcode: ");
+                        String b = scanner.nextLine();
+                        System.out.print("Price: ");
+                        double p = Double.parseDouble(scanner.nextLine());
+                        System.out.print("Quantity: ");
+                        int q = Integer.parseInt(scanner.nextLine());
+                        dao.create(n, p, q, c, ex, b);
                         break;
                     case "2":
                         dao.readAll();
                         break;
                     case "3":
-
+                        System.out.print("ID to update: ");
+                        int uid = Integer.parseInt(scanner.nextLine());
+                        System.out.print("New Price: ");
+                        double np = Double.parseDouble(scanner.nextLine());
+                        System.out.print("New Quantity: ");
+                        int nq = Integer.parseInt(scanner.nextLine());
+                        dao.update(uid, np, nq);
                         break;
                     case "4":
-
+                        System.out.print("ID to delete: ");
+                        int did = Integer.parseInt(scanner.nextLine());
+                        System.out.print("Confirm deletion? (y/n): ");
+                        if (scanner.nextLine().equalsIgnoreCase("y")) {
+                            dao.delete(did);
+                        }
                         break;
                     case "5":
                         System.out.print("Search Name: ");
                         dao.searchByName(scanner.nextLine());
                         break;
                     case "6":
-                        System.out.print("Enter minimum price: ");
+                        System.out.print("Enter minimum price to filter: ");
                         double min = Double.parseDouble(scanner.nextLine());
                         dao.searchByMinPrice(min);
                         break;
+                    default:
+                        System.out.println("Invalid option. Try again.");
+                        break;
                 }
+            } catch (NumberFormatException e) {
+                System.out.println("Input Error: Please enter a valid number for Price, Qty, or ID.");
             } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
+                System.out.println("An error occurred: " + e.getMessage());
             }
         }
     }
