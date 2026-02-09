@@ -20,14 +20,15 @@ public class ProductDAO {
         }
     }
 
-
     public void readAll() {
         String sql = "SELECT * FROM products";
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
-            System.out.println("\n--- INVENTORY REPORT ---");
+            System.out.println("\n--- FULL INVENTORY REPORT ---");
+            boolean hasData = false;
             while (rs.next()) {
+                hasData = true;
                 System.out.println("ID: " + rs.getInt("product_id") +
                         " | Name: " + rs.getString("name") +
                         " | Cat: " + rs.getString("category") +
@@ -36,6 +37,7 @@ public class ProductDAO {
                         " | Price: $" + rs.getDouble("price") +
                         " | Qty: " + rs.getInt("quantity"));
             }
+            if (!hasData) System.out.println("Inventory is empty.");
         } catch (SQLException e) {
             System.out.println(">> Database Error (Read): " + e.getMessage());
         }
@@ -56,7 +58,7 @@ public class ProductDAO {
         }
     }
 
-
+    // 4. DELETE
     public void delete(int id) {
         String sql = "DELETE FROM products WHERE product_id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -66,7 +68,6 @@ public class ProductDAO {
             else System.out.println(">> Database: ID not found.");
         } catch (SQLException e) {
             System.out.println(">> Database Error (Delete): " + e.getMessage());
-
         }
     }
 
@@ -77,9 +78,12 @@ public class ProductDAO {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, "%" + name + "%");
             ResultSet rs = pstmt.executeQuery();
+            boolean found = false;
             while (rs.next()) {
-                System.out.println(">> Result: " + rs.getString("name") + " [" + rs.getString("barcode") + "]");
+                found = true;
+                System.out.println(">> Found: " + rs.getString("name") + " (Barcode: " + rs.getString("barcode") + ")");
             }
+            if (!found) System.out.println(">> No products found matching: " + name);
         } catch (SQLException e) {
             System.out.println(">> Database Error (Search): " + e.getMessage());
         }
@@ -90,22 +94,36 @@ public class ProductDAO {
         String sql = "SELECT * FROM products WHERE price >= ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
             pstmt.setDouble(1, minPrice);
             ResultSet rs = pstmt.executeQuery();
-
-            System.out.println("\n priced above " + minPrice );
             boolean found = false;
             while (rs.next()) {
                 found = true;
-                System.out.println("ID: " + rs.getInt("product_id") +
-                        " | Name: " + rs.getString("name") +
-                        " | Price: $" + rs.getDouble("price"));
+                System.out.println(">> " + rs.getString("name") + " | Price: $" + rs.getDouble("price"));
             }
-            if (!found) System.out.println("No products found above this price.");
-
+            if (!found) System.out.println(">> No products found above $" + minPrice);
         } catch (SQLException e) {
             System.out.println(">> Database Error (Min Search): " + e.getMessage());
+        }
+    }
+
+
+    public void searchByPriceRange(double min, double max) {
+        String sql = "SELECT * FROM products WHERE price BETWEEN ? AND ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setDouble(1, min);
+            pstmt.setDouble(2, max);
+            ResultSet rs = pstmt.executeQuery();
+            boolean found = false;
+            System.out.println("\n--- Range: $" + min + " to $" + max + " ---");
+            while (rs.next()) {
+                found = true;
+                System.out.println(">> " + rs.getString("name") + " | Price: $" + rs.getDouble("price"));
+            }
+            if (!found) System.out.println("No products found in this range.");
+        } catch (SQLException e) {
+            System.out.println(">> Database Error (Range Search): " + e.getMessage());
         }
     }
 }
